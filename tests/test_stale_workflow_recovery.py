@@ -51,9 +51,7 @@ async def run_periodic_until(periodic: Coroutine[Any, Any, None], done: asyncio.
             await task
 
 
-async def mark_workflow_crashed(
-    storage, instance_id: str, worker_id: str = "crashed_worker"
-):
+async def mark_workflow_crashed(storage, instance_id: str, worker_id: str = "crashed_worker"):
     """Reset a workflow to running with a stale lock as if the worker crashed"""
     await storage.try_acquire_lock(instance_id, worker_id)
     async with AsyncSession(storage.engine, expire_on_commit=False) as conn:
@@ -76,9 +74,7 @@ class RecordingHooks:
     ) -> None:
         self.calls.append(("on_workflow_start", instance_id, workflow_name, input_data))
 
-    async def on_workflow_complete(
-        self, instance_id: str, workflow_name: str, result: Any
-    ) -> None:
+    async def on_workflow_complete(self, instance_id: str, workflow_name: str, result: Any) -> None:
         self.calls.append(("on_workflow_complete", instance_id, workflow_name, result))
 
     async def on_workflow_failed(
@@ -509,7 +505,7 @@ class TestStaleWorkflowRecovery:
             storage=sqlite_storage,
             service_name="test_service",
             worker_id="test_worker",
-            hooks=hooks
+            hooks=hooks,
         )
         set_replay_engine(replay_engine)
 
@@ -552,7 +548,7 @@ class TestStaleWorkflowRecovery:
             storage=sqlite_storage,
             service_name="test_service",
             worker_id="test_worker",
-            hooks=hooks
+            hooks=hooks,
         )
         set_replay_engine(replay_engine)
 
