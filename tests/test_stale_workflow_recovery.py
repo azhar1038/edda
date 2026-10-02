@@ -88,7 +88,7 @@ class RecordingHooks:
 
     def calls_named(self, name: str) -> list[tuple]:
         return [call for call in self.calls if call[0] == name]
-    
+
 
 # Test workflows and activities (prefixed with 'recovery_' to avoid pytest confusion)
 @activity
